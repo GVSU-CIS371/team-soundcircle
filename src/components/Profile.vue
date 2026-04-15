@@ -20,8 +20,24 @@
                 class="mt-2"
                 ></v-text-field>
             </div>
+            
+            <div class="mt-2 mb-6 text-center">
+              <v-btn 
+                variant="flat"
+                style="background-color:#1DB954; color:black;" 
+                class="my-4 d-flex align-center justify-center" 
+                @click="connectSpotify"
+                :disabled="spotifyConnected">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                  alt="Spotify"
+                  style="width:20px; height:20px; margin-right:8px;"/>
+                {{ spotifyConnected ? "Spotify Connected" : "Connect Spotify" }}
+              </v-btn>
+            </div>
 
             <v-text-field 
+              style="margin-top: 24px;"
                 v-model="userData.displayName" 
                 label="Display Name" 
                 variant="outlined" 
@@ -68,9 +84,11 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const userData = ref<any>(null);
+const spotifyConnected = ref(false);
 
 // Fetch data when page loads
 onMounted(async () => {
+  spotifyConnected.value = localStorage.getItem("spotifyConnected") === "true";
   const user = auth.currentUser;
   if (user) {
     const docRef = doc(db, "users", user.uid);
@@ -109,4 +127,23 @@ const handleLogout = async () => {
   await signOut(auth);
   router.push('/');
 };
+
+// Spotify Connection
+function connectSpotify() {
+
+  const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+  const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
+
+  const scope = "user-read-email user-read-private user-top-read";
+
+  const authURL = 
+    "https://accounts.spotify.com/authorize" +
+    "?response_type=code" +
+    "&client_id=" + encodeURIComponent(clientId) +
+    "&scope=" + encodeURIComponent(scope) +
+    "&redirect_uri=" + encodeURIComponent(redirectUri);
+
+  window.location.href = authURL;
+}
+
 </script>
