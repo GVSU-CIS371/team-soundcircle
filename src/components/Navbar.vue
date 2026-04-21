@@ -7,6 +7,7 @@
     <v-spacer></v-spacer>
 
     <v-btn variant="text" to="/feed">Feed</v-btn>
+    <v-btn varient="text" to="/stats">Stats</v-btn>
     <v-btn variant="text" to="/profile">Profile</v-btn>
 
     <v-btn variant="outlined" class="ml-2" @click="handleLogout">

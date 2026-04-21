@@ -22,20 +22,22 @@
             </div>
             
             <div class="mt-2 mb-6 text-center">
-              <v-btn 
-                variant="flat"
-                style="background-color:#1DB954; color:black;" 
+              <v-btn variant="flat" style="background-color:#1DB954; color:black;" 
                 class="my-4 d-flex align-center justify-center" 
                 @click="connectSpotify"
                 :disabled="spotifyConnected">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                  alt="Spotify"
-                  style="width:20px; height:20px; margin-right:8px;"/>
+                  alt="Spotify" style="width:20px; height:20px; margin-right:8px;"/>
                 {{ spotifyConnected ? "Spotify Connected" : "Connect Spotify" }}
               </v-btn>
-            </div>
 
+              <v-btn
+                v-if="spotifyConnected" variant="text" color="error"
+                @click="disconnectSpotify">
+                Disconnect Spotify
+              </v-btn>
+            </div>
             <v-text-field 
               style="margin-top: 24px;"
                 v-model="userData.displayName" 
@@ -88,7 +90,7 @@ const spotifyConnected = ref(false);
 
 // Fetch data when page loads
 onMounted(async () => {
-  spotifyConnected.value = localStorage.getItem("spotifyConnected") === "true";
+  spotifyConnected.value = !!localStorage.getItem("spotify_access_token");
   const user = auth.currentUser;
   if (user) {
     const docRef = doc(db, "users", user.uid);
@@ -128,22 +130,64 @@ const handleLogout = async () => {
   router.push('/');
 };
 
+function generateRandomString(length: number) {
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let text = "";
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
+async function sha256(plain: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+  return window.crypto.subtle.digest("SHA-256", data);
+}
+
+function base64encode(input: ArrayBuffer) {
+  return btoa(String.fromCharCode(...new Uint8Array(input)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+
 // Spotify Connection
-function connectSpotify() {
+async function connectSpotify() {
 
   const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
 
   const scope = "user-read-email user-read-private user-top-read";
 
+  const codeVerifier = generateRandomString(64);
+  localStorage.setItem("spotify_code_verifier", codeVerifier);
+
+  const hashedVerifier = await sha256(codeVerifier);
+  const codeChallenge = base64encode(hashedVerifier);
+
+
   const authURL = 
     "https://accounts.spotify.com/authorize" +
     "?response_type=code" +
     "&client_id=" + encodeURIComponent(clientId) +
     "&scope=" + encodeURIComponent(scope) +
-    "&redirect_uri=" + encodeURIComponent(redirectUri);
+    "&redirect_uri=" + encodeURIComponent(redirectUri) +
+    "&code_challenge_method=S256" +
+    "&code_challenge=" + encodeURIComponent(codeChallenge);
 
   window.location.href = authURL;
+}
+
+function disconnectSpotify() {
+  localStorage.removeItem("spotifyConnected");
+  localStorage.removeItem("spotify_access_token");
+  localStorage.removeItem("spotify_refresh_token");
+  localStorage.removeItem("spotify_code_verifier");
+
+  spotifyConnected.value = false;
 }
 
 </script>
