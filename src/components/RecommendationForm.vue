@@ -11,29 +11,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { db } from '../firebase';
-import { collection, addDoc, getDoc, doc, DocumentSnapshot } from 'firebase/firestore';
 import { auth } from '../firebase';
+import { useRecommendationStore } from '../stores/recommendationStore';
 
 const recTitle = ref('');
 const recText = ref('');
+const recommendationStore = useRecommendationStore();
 
-async function onCreate() {
+function onCreate() {
     if (recTitle.value != "" && recText.value != "" && auth.currentUser != null) {
-        let userDisplayName = "";
-        await getDoc(doc(db, "users/" + auth.currentUser.uid)).then((qd: DocumentSnapshot) => {
-            if (qd.exists()) {
-                userDisplayName = qd.data().displayName;
-            }
-        });
-
-        addDoc(collection(db, "recommendations"),
-        {
-            recTitle: recTitle.value,
-            recText: recText.value,
-            user: auth.currentUser.uid,
-            userName: userDisplayName
-        });
+        recommendationStore.makeRecommendation(recTitle.value, recText.value);
     }
 }
 </script>
