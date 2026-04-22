@@ -36,7 +36,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="spotifyConnected" variant="text" color="error"
+                  v-if="spotifyConnected" variant="text" color="error" class="mt-2"
                   @click="disconnectSpotify">
                   Disconnect Spotify
                 </v-btn>

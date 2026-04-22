@@ -2,10 +2,10 @@
   <v-container class="mt-10">
     <v-row justify="center">
       <v-col cols="12" md="8">
-        <v-card class="pa-5">
+        <v-card class="pa-5" theme="light">
           <img
             v-if="profile?.images?.length" :src="profile.images[0].url"
-            style="width:60px; border-radius:50%; margin-bottom:8px; margin-top:12px;">
+            style="width:80px; border-radius:50%; margin-bottom:8px; margin-top:12px;">
           <v-card-title class="text-h4">{{ profile?.display_name || "Spotify" }}'s Listening Stats</v-card-title>
 
           <v-card-text>
@@ -16,7 +16,7 @@
             </div>
 
             <div v-else>
-              <h2 class="text-h5 mb-3">Top 5 Artists</h2>
+              <h2 class="text-h4 mb-3" style="color: black;">Top 5 Artists</h2>
               <ul>
                 <li
                   v-for="artist in topArtists" :key="artist.id"
@@ -25,16 +25,16 @@
                   <img
                     v-if="artist.images.length > 0"
                     :src="artist.images[0].url"
-                    style="width:60px; height:60px; object-fit:cover; border-radius:50%;">
+                    style="width:80px; height:80px; object-fit:cover; border-radius:50%;">
 
-                  <div style="font-weight:600">
+                  <div style="font-size: 20px; font-weight:600;">
                     {{ artist.name }}
                   </div>
 
                 </li>
               </ul>
 
-              <h2 class="text-h5 mt-6 mb-3">Top 10 Tracks</h2>
+              <h2 class="text-h4 mt-6 mb-3" style="color: black;">Top 10 Tracks</h2>
               <ul>
                 <li
                   v-for="track in topTracks" :key="track.id"
@@ -42,17 +42,17 @@
 
                   <img
                     :src="track.album.images[0].url"
-                    style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
+                    style="width:80px; height:80px; object-fit:cover; border-radius:8px;">
 
                   <div
                     style="display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
 
                     <div>
-                      <div style="font-weight:600">
+                      <div style="font-size: 20px; font-weight:600">
                         {{ track.name }}
                       </div>
 
-                      <div style="color:gray; font-size:14px">
+                      <div style="color:gray; font-size:16px">
                         {{ track.artists.map(a => a.name).join(", ") }}
                       </div>
                     </div>
