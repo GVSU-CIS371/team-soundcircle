@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card theme="dark" style="margin-bottom: 10px;">
     <v-card-title>{{ displayName }} recommends: {{ title }}</v-card-title>
     <v-card-text>{{ content }}</v-card-text>
   </v-card>
@@ -7,9 +7,10 @@
 
 <script setup lang="ts">
 export type RecommendationType = {
-  title: string,
-  content: string,
-  displayName: string
+  recTitle: string,
+  recText: string,
+  user: string,
+  userName: string
 }
 
 const props = defineProps({
