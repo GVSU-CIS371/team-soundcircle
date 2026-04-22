@@ -7,31 +7,23 @@
             v-if="profile?.images?.length" :src="profile.images[0].url"
             style="width:100px; border-radius:50%; margin-bottom:8px; margin-top:12px;">
           <v-card-title class="text-h4">{{ profile?.display_name || "Spotify" }}'s Listening Stats</v-card-title>
-
           <v-card-text>
             <div v-if="loading">Loading Spotify stats...</div>
-
             <div v-else-if="error">
               {{ error }}
             </div>
-
             <div v-if="recentTrack" class="mb-6">
               <h2 class="text-h4 mb-3" style="color: black;">Most Recently Played Track</h2>
-
               <ul>
                 <li
-                  style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"
-                >
+                  style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
                   <img
                     :src="recentTrack.track.album.images[0].url"
-                    style="width:80px; height:80px; object-fit:cover; border-radius:8px;"
-                  />
-
+                    style="width:80px; height:80px; object-fit:cover; border-radius:8px;"/>
                   <div style="display:flex; flex-direction:column; align-items:flex-start;">
                     <div style="font-size: 20px; font-weight:600;">
                       {{ recentTrack.track.name }}
                     </div>
-
                     <div style="color: gray; font-size:16px;">
                       {{ recentTrack.track.artists.map(a => a.name).join(", ") }}
                     </div>
@@ -48,37 +40,29 @@
                 <li
                   v-for="artist in topArtists" :key="artist.id"
                   style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-
                   <img
                     v-if="artist.images.length > 0"
                     :src="artist.images[0].url"
                     style="width:80px; height:80px; object-fit:cover; border-radius:50%;">
-
                   <div style="font-size: 20px; font-weight:600;">
                     {{ artist.name }}
                   </div>
-
                 </li>
               </ul>
-
               <h2 class="text-h4 mt-6 mb-3" style="color: black;">Top 10 Tracks</h2>
               <ul>
                 <li
                   v-for="track in topTracks" :key="track.id"
                   style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-
                   <img
                     :src="track.album.images[0].url"
                     style="width:80px; height:80px; object-fit:cover; border-radius:8px;">
-
                   <div
                     style="display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
-
                     <div>
                       <div style="font-size: 20px; font-weight:600">
                         {{ track.name }}
                       </div>
-
                       <div style="color:gray; font-size:16px">
                         {{ track.artists.map(a => a.name).join(", ") }}
                       </div>

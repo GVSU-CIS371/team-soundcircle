@@ -5,18 +5,15 @@
         <div v-if="!userData" class="text-center mt-10">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
-
         <div v-else>
           <v-card theme ="light" class="pa-6 text-center" elevation="0" border rounded="lg">
             <v-avatar size="140" class="mb-4" color="primary">
               <v-img v-if="userData.photoURL" :src="userData.photoURL" cover></v-img>
               <v-icon v-else size="70" color="white">mdi-account</v-icon>
             </v-avatar>
-            
             <h1 class="text-h4 font-weight-bold text-black">{{ userData.displayName }}</h1>
             <p v-if="isOwnProfile" class="text-subtitle-1 text-grey">{{ userData.email }}</p>
           </v-card>
-
           <v-card class="pa-6 mt-4" elevation="0" border rounded="lg" theme="light">
             <div v-if="isOwnProfile">
               <h2 class="text-h6 mb-4 text-black">Edit Profile</h2>
@@ -34,7 +31,6 @@
                     alt="Spotify" style="width:20px; height:20px; margin-right:8px;"/>
                   {{ spotifyConnected ? "Spotify Connected" : "Connect Spotify" }}
                 </v-btn>
-
                 <v-btn
                   v-if="spotifyConnected" variant="text" color="error" class="mt-2"
                   @click="disconnectSpotify">
@@ -51,30 +47,24 @@
           </v-card>
         </div>
       </v-col>
-
       <v-col cols="12" md="4">
         <v-card class="pa-4" elevation="0" border rounded="lg">
           <v-card-title class="pb-2 text-black">Friends</v-card-title>
-          
           <v-list lines="one" bg-color="transparent">
             <v-list-item 
               v-for="friend in userFriends" 
               :key="friend.userId" 
-              class="cursor-pointer"
-            >
+              class="cursor-pointer">
               <template v-slot:prepend>
                 <v-avatar size="36" color="primary" class="mr-3">
                   <span class="text-white">{{ friend.displayName?.charAt(0).toUpperCase() }}</span>
                 </v-avatar>
               </template>
-              
               <v-list-item-title @click="router.push(`/profile/${friend.userId}`)">{{ friend.displayName }}</v-list-item-title>
-              
               <template v-slot:append v-if="isOwnProfile">
                 <v-btn icon="mdi-delete" variant="plain" color="error" size="small" @click="removeFriend(friend.friendshipId)"></v-btn>
               </template>
             </v-list-item>
-            
             <v-list-item v-if="userFriends.length === 0" class="text-grey">
               No friends to display.
             </v-list-item>
