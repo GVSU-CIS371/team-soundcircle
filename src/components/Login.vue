@@ -14,16 +14,22 @@
               <v-text-field
                 v-model="email"
                 label="Email"
-                name="email"
                 prepend-icon="mdi-email"
                 type="email"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-if="!isLogin"
+                v-model="username"
+                label="Unique Username"
+                prepend-icon="mdi-at"
                 required
               ></v-text-field>
               
               <v-text-field
                 v-model="password"
                 label="Password"
-                name="password"
                 prepend-icon="mdi-lock"
                 type="password"
                 required
@@ -39,10 +45,9 @@
           
           <v-card-actions class="justify-center">
             <v-btn variant="text" @click="toggleMode">
-              {{ isLogin ? 'Need an account? Register' : 'Already have an account? Login' }}
+              {{ isLogin ? 'Need an account? Sign Up' : 'Have an account? Sign In' }}
             </v-btn>
           </v-card-actions>
-          
         </v-card>
       </v-col>
     </v-row>
@@ -51,16 +56,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'vue-router';
-import { db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, query, where, getDocs, collection } from 'firebase/firestore';
 
-// State variables
 const isLogin = ref(true);
 const email = ref('');
 const password = ref('');
+const username = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
@@ -75,13 +79,24 @@ const handleSubmit = async () => {
       await signInWithEmailAndPassword(auth, email.value, password.value);
       router.push('/feed');
     } else {
+      // Check if username exists first
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("username", "==", username.value));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        errorMessage.value = "Username is already taken!";
+        return;
+      }
+
       const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         email: user.email,
-        displayName: email.value.split('@')[0],
+        username: username.value,
+        displayName: username.value,
         bio: "",
         favoriteGenre: "",
         photoURL: "",  
@@ -97,13 +112,5 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-.error-message {
-  color: #ff5252;
-  font-size: 0.875rem;
-  margin-top: 10px;
-  text-align: center;
-}
-.v-container {
-    min-height: 100vh;
-}
+.error-message { color: #ff5252; text-align: center; margin-top: 10px; }
 </style>
