@@ -187,7 +187,7 @@ async function connectSpotify() {
   const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
 
-  const scope = "user-read-email user-read-private user-top-read";
+  const scope = "user-read-email user-read-private user-top-read user-read-recently-played";
 
   const codeVerifier = generateRandomString(64);
   localStorage.setItem("spotify_code_verifier", codeVerifier);

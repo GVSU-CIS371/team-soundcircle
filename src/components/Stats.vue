@@ -5,7 +5,7 @@
         <v-card class="pa-5" theme="light">
           <img
             v-if="profile?.images?.length" :src="profile.images[0].url"
-            style="width:80px; border-radius:50%; margin-bottom:8px; margin-top:12px;">
+            style="width:100px; border-radius:50%; margin-bottom:8px; margin-top:12px;">
           <v-card-title class="text-h4">{{ profile?.display_name || "Spotify" }}'s Listening Stats</v-card-title>
 
           <v-card-text>
@@ -15,7 +15,34 @@
               {{ error }}
             </div>
 
-            <div v-else>
+            <div v-if="recentTrack" class="mb-6">
+              <h2 class="text-h4 mb-3" style="color: black;">Most Recently Played Track</h2>
+
+              <ul>
+                <li
+                  style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"
+                >
+                  <img
+                    :src="recentTrack.track.album.images[0].url"
+                    style="width:80px; height:80px; object-fit:cover; border-radius:8px;"
+                  />
+
+                  <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                    <div style="font-size: 20px; font-weight:600;">
+                      {{ recentTrack.track.name }}
+                    </div>
+
+                    <div style="color: gray; font-size:16px;">
+                      {{ recentTrack.track.artists.map(a => a.name).join(", ") }}
+                    </div>
+                    <div style="color: gray; font-size:14px;">
+                      Played at: {{ new Date(recentTrack.played_at).toLocaleString() }}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div>
               <h2 class="text-h4 mb-3" style="color: black;">Top 5 Artists</h2>
               <ul>
                 <li
@@ -74,6 +101,7 @@ const loading = ref(true);
 const error = ref("");
 const topArtists = ref<any[]>([]);
 const topTracks = ref<any[]>([]);
+const recentTrack = ref<any>(null);
 
 const profile = ref<any>(null);
 
@@ -119,6 +147,20 @@ onMounted(async () => {
         },
       }
     );
+
+    const recentResponse = await fetch(
+      "https://api.spotify.com/v1/me//player/recently-played?limit=1",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const recentData = await recentResponse.json();
+    console.log("Recently Played:", recentData);
+
+    recentTrack.value = recentData.items?.[0]  || null;
 
     const artistsData = await artistsResponse.json();
     const tracksData = await tracksResponse.json();
