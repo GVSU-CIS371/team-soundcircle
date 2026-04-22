@@ -7,9 +7,6 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn variant="text" to="/feed">Feed</v-btn>
-    <v-btn varient="text" to="/stats">Stats</v-btn>
-    <v-btn variant="text" to="/profile">Profile</v-btn>
     <v-btn 
       :variant="isActive('/feed') ? 'flat' : 'text'" 
       @click="navigateTo('/feed')"
@@ -32,6 +29,15 @@
         color="error"
         inline
       ></v-badge>
+    </v-btn>
+
+    <v-btn 
+      :variant="isActive('/stats') ? 'flat' : 'text'" 
+      @click="navigateTo('/stats')"
+      class="mr-2"
+    >
+      <v-icon start>mdi-account</v-icon>
+      Stats
     </v-btn>
 
     <v-btn 

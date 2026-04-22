@@ -24,33 +24,25 @@
               <v-text-field v-model="userData.displayName" label="Display Name" variant="outlined" density="comfortable"></v-text-field>
               <v-select v-model="userData.favoriteGenre" :items="genres" label="Favorite Genre" variant="outlined" density="comfortable"></v-select>
               <v-textarea v-model="userData.bio" label="Bio" variant="outlined" density="comfortable"></v-textarea>
+              <div class="mt-6 mb-8 text-center">
+                <v-btn variant="flat" style="background-color:#1DB954; color:black;" 
+                  class="my-4 d-flex align-center justify-center" 
+                  @click="connectSpotify"
+                  :disabled="spotifyConnected">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                    alt="Spotify" style="width:20px; height:20px; margin-right:8px;"/>
+                  {{ spotifyConnected ? "Spotify Connected" : "Connect Spotify" }}
+                </v-btn>
+
+                <v-btn
+                  v-if="spotifyConnected" variant="text" color="error"
+                  @click="disconnectSpotify">
+                  Disconnect Spotify
+                </v-btn>
+              </div>
               <v-btn color="primary" class="text-white" @click="updateProfile" block size="large" rounded="pill">Save Changes</v-btn>
             </div>
-            
-            <div class="mt-2 mb-6 text-center">
-              <v-btn variant="flat" style="background-color:#1DB954; color:black;" 
-                class="my-4 d-flex align-center justify-center" 
-                @click="connectSpotify"
-                :disabled="spotifyConnected">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                  alt="Spotify" style="width:20px; height:20px; margin-right:8px;"/>
-                {{ spotifyConnected ? "Spotify Connected" : "Connect Spotify" }}
-              </v-btn>
-
-              <v-btn
-                v-if="spotifyConnected" variant="text" color="error"
-                @click="disconnectSpotify">
-                Disconnect Spotify
-              </v-btn>
-            </div>
-            <v-text-field 
-              style="margin-top: 24px;"
-                v-model="userData.displayName" 
-                label="Display Name" 
-                variant="outlined" 
-                prepend-icon="mdi-account-circle"
-            ></v-text-field>
             <div v-else>
               <h2 class="text-h6 mb-2 text-black">About</h2>
               <p class="mb-4 text-grey-darken-2">{{ userData.bio || 'No bio available.' }}</p>
@@ -103,6 +95,8 @@ const route = useRoute();
 const router = useRouter();
 const userData = ref<any>(null);
 const spotifyConnected = ref(false);
+const userFriends = ref<any[]>([]);
+const isOwnProfile = ref(true);
 
 
 const genres = ['Rock', 'Pop', 'Hip Hop', 'Jazz', 'Classical', 'Electronic', 'R&B', 'Country', 'Indie', 'Alternative'];
