@@ -32,6 +32,15 @@
     </v-btn>
 
     <v-btn 
+      :variant="isActive('/stats') ? 'flat' : 'text'" 
+      @click="navigateTo('/stats')"
+      class="mr-2"
+    >
+      <v-icon start>mdi-account</v-icon>
+      Stats
+    </v-btn>
+
+    <v-btn 
       :variant="isActive('/profile') ? 'flat' : 'text'" 
       @click="navigateTo('/profile')"
       class="mr-2"

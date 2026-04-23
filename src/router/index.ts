@@ -3,13 +3,17 @@ import type { RouteRecordRaw } from 'vue-router';
 import Login from '../components/Login.vue';
 import Feed from '../components/Feed.vue';
 import Profile from '../components/Profile.vue';
+import SpotifyCallback from '../components/SpotifyCallback.vue';
+import Stats from '../components/Stats.vue';
 import Friends from '../components/Friends.vue';
 
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'Login', component: Login },
   { path: '/feed', name: 'Feed', component: Feed },
   { path: '/profile/:id?', name: 'Profile', component: Profile },
-  { path: '/friends', name: 'Friends', component: Friends }
+  { path: '/friends', name: 'Friends', component: Friends },
+  { path: '/stats', name: 'Stats', component: Stats },
+  { path: '/callback', name: 'SpotifyCallback', component: SpotifyCallback }
 ];
 
 const router = createRouter({
