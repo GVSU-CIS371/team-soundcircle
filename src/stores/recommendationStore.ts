@@ -34,12 +34,32 @@ export const useRecommendationStore = defineStore("RecommendationStore", {
                         recTitle: data.recTitle,
                         recText: data.recText,
                         userName: data.userName,
-                        user: data.user
+                        user: data.user,
+                        songId: "none right now"
                     }                   
                     
                     if (currentFriends.includes(recommendation.user)) this.recommendations.push(recommendation);
                 });
             });
+
+            const token = localStorage.getItem("spotify_access_token");
+
+            console.log("a")
+            if (!token) {
+                console.log("aaa")
+                return;
+            }
+
+            //const song = await fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf")
+            console.log("b")
+            const song = fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            })
+            console.log("c")
+            console.log(song)
+            console.log("this is song: ")
         },
         async makeRecommendation(recTitle: string, recText: string) {
             if (auth.currentUser == null) return;
@@ -56,7 +76,8 @@ export const useRecommendationStore = defineStore("RecommendationStore", {
                 recTitle: recTitle,
                 recText: recText,
                 user: currentUID,
-                userName: userDisplayName
+                userName: userDisplayName,
+                songId: "none right now"
             }
 
             addDoc(collection(db, "recommendations"), newRec);

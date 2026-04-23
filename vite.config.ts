@@ -5,5 +5,5 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/team-soundcircle/',
   plugins: [vue()],
-  base: '/team-soundcircle/'
+  //base: '/team-soundcircle/'
 })

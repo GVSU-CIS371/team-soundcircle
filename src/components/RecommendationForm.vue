@@ -22,23 +22,6 @@ async function onCreate() {
     if (songId.value != "" && recText.value != "" && auth.currentUser != null) {
         recommendationStore.makeRecommendation(songId.value, recText.value);
     }
-
-    const token = localStorage.getItem("spotify_access_token");
-
-    if (!token) {
-        return;
-    }
-
-    //const song = await fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf")
-
-    const song = fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-
-    console.log(song)
-    console.log("this is song: ")
 }
 </script>
 
