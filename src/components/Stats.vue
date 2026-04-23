@@ -25,7 +25,7 @@
                       {{ recentTrack.track.name }}
                     </div>
                     <div style="color: gray; font-size:16px;">
-                      {{ recentTrack.track.artists.map(a => a.name).join(", ") }}
+                      {{ recentTrack.track.artists.map(a: any => a.name).join(", ") }}
                     </div>
                     <div style="color: gray; font-size:14px;">
                       Played at: {{ new Date(recentTrack.played_at).toLocaleString() }}
@@ -64,7 +64,7 @@
                         {{ track.name }}
                       </div>
                       <div style="color:gray; font-size:16px">
-                        {{ track.artists.map(a => a.name).join(", ") }}
+                        {{ track.artists.map(a: any => a.name).join(", ") }}
                       </div>
                     </div>
                   </div>
