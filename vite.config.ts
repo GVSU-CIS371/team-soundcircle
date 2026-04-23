@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/team-soundcircle/',
   plugins: [vue()],
   base: '/team-soundcircle/'
 })
