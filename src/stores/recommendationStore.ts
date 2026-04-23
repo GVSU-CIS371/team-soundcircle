@@ -52,10 +52,10 @@ export const useRecommendationStore = defineStore("RecommendationStore", {
 
             //const song = await fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf")
             console.log("b")
-            const song = fetch("https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            const song = fetch("https://api.spotify.com/tracks/6FBPOJLxUZEair6x4kLDhf", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
             console.log("c")
             console.log(song)
