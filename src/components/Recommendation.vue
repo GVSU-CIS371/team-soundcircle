@@ -10,15 +10,13 @@ export type RecommendationType = {
   recTitle: string,
   recText: string,
   user: string,
-  userName: string,
-  songId: string
+  userName: string
 }
 
 const props = defineProps({
   title: String,
   content: String,
-  displayName: String,
-  songId: String
+  displayName: String
 });
 </script>
 
